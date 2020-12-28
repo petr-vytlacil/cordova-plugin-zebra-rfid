@@ -2,7 +2,7 @@
 Cordova Zebra Rfid 读取插件
 
 #### 插件安装
-`cordova plugin add xxxx`
+`cordova plugin add https://github.com/shuto-cn/cordova-plugin-zebra-rfid.git`
 
 #### 插件使用
 - 初始化RFID
