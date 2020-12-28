@@ -1,0 +1,17 @@
+{
+  "name": "zebra-rfid",
+  "version": "1.0.0",
+  "description": "zebra-rfid-reader",
+  "cordova": {
+    "id": "zebra-rfid",
+    "platforms": [
+      "android"
+    ]
+  },
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova-android"
+  ],
+  "author": "",
+  "license": "ISC"
+}
