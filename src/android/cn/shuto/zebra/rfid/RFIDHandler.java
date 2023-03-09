@@ -40,18 +40,16 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
     private static RFIDReader reader;
     private EventHandler eventHandler;
     // In case of RFD8500 change reader name with intended device below from list of paired RFD8500
-    String readername = "RFD8500123";
+    String readername = "MC3300R22150523020725";
 
     private Context context;
-    // 持有一个接口对象
+    
     RFIDCallBack rfidCallBackListener;
-
-    // 提供注册事件监听的方法
+    
     public void setOnChangeListener(RFIDCallBack rfidCallBackListener) {
         this.rfidCallBackListener = rfidCallBackListener;
     }
-
-    // 初始化
+    
     public void init(Context context) {
         this.context = context;
         InitSDK();
@@ -203,13 +201,14 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
                 reader.Events.setTagReadEvent(true);
                 reader.Events.setAttachTagDataWithReadEvent(false);
                 // set trigger mode as rfid so scanner beam will not come
-                reader.Config.setTriggerMode(ENUM_TRIGGER_MODE.RFID_MODE, true);
+                reader.Config.setTriggerMode(ENUM_TRIGGER_MODE.BARCODE_MODE, true);
                 // set start and stop triggers
                 reader.Config.setStartTrigger(triggerInfo.StartTrigger);
                 reader.Config.setStopTrigger(triggerInfo.StopTrigger);
                 // power levels are index based so maximum power supported get the last one
                 // general
-                int MAX_POWER = reader.ReaderCapabilities.getTransmitPowerLevelValues().length - 1;
+                // set power 20%
+                int MAX_POWER = Math.round(( reader.ReaderCapabilities.getTransmitPowerLevelValues().length - 1 ) * (0.2));
                 // set antenna configurations
                 Antennas.AntennaRfConfig config = reader.Config.Antennas.getAntennaRfConfig(1);
                 config.setTransmitPowerIndex(MAX_POWER);
