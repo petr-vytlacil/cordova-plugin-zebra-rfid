@@ -17,7 +17,7 @@
         <source-file src="src/android/cn/shuto/zebra/rfid/ZebraRfidPlugin.java" target-dir="src/cn/shuto/zebra/rfid" />
 
         <framework src="src/android/build.gradle" custom="true" type="gradleReference" />
-        <lib-file src="src/android/API3_LIB-release-2.0.2.110.aar" />
+        <lib-file src="src/android/API3_LIB-release-2.0.1.34.aar" />
         <framework src="com.android.support:support-v4:$ANDROID_SUPPORT_V4_VERSION" />
         <preference name="ANDROID_SUPPORT_V4_VERSION" default="27.+" />
     </platform>
