@@ -1,24 +1,24 @@
-#### 插件介绍
-Cordova Zebra Rfid 读取插件
+#### Plug-in Introduction
+Cordova Zebra Rfid Reader Plugin
 
-#### 插件安装
-`cordova plugin add https://github.com/shuto-cn/cordova-plugin-zebra-rfid.git`
+#### Plugin Installation
+`cordova plugin add https://github.com/Egalite-Dev-Ops/cordova-plugin-zebra-rfid.git`
 
-#### 插件使用
-- 初始化RFID
+#### plug-in use
+- RFID Initialization
 	
-	**调用一次就好**
+	**Just call it once**
 	
-	**返回结果需要去重**
+	**The returned result needs to be deduplicated**
 	```
-	// AppReady时初始化rfid
+	// AppReady time initialization rfid
 	zebraRfid.init("", function (rs) {
 		alert(JSON.stringify(rs));
 	}, function (err) {
 		
 	})
 	```
-- 查看RFID是否连接
+- Check if the RFID is connected
 	```
 	$scope.check_connect = function () {
 		zebraRfid.checkConnect("", function (rs) {
@@ -30,9 +30,9 @@ Cordova Zebra Rfid 读取插件
 	```
 
 
-- 连接RFID
+- Connect to RFID
 
-	**能不用就不用，不知道会有什么问题**
+	**I don't know what the problem will be**
 	```
 	$scope.connect = function () {
 		zebraRfid.connect("", function (rs) {
@@ -43,9 +43,9 @@ Cordova Zebra Rfid 读取插件
 	}
 	```
 
-- 断开RFID
+- Disconnect RFID
 
-	**能不用就不用，不知道会有什么问题**
+	**I don't know what the problem will be**
 	```
 	$scope.disconnect = function () {
 		zebraRfid.disconnect("", function (rs) {
