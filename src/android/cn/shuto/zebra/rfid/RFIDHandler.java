@@ -208,10 +208,10 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
                 // power levels are index based so maximum power supported get the last one
                 // general
                 // set power 20%
-                int MAX_POWER = (int)Math.round(( reader.ReaderCapabilities.getTransmitPowerLevelValues().length - 1 ) * (50 / 100));
+                int MAX_POWER = reader.ReaderCapabilities.getTransmitPowerLevelValues().length - 1;
                 // set antenna configurations
                 Antennas.AntennaRfConfig config = reader.Config.Antennas.getAntennaRfConfig(1);
-                config.setTransmitPowerIndex(MAX_POWER);
+                config.setTransmitPowerIndex( ( MAX_POWER * ( 75 / 100 ) ) );
                 config.setrfModeTableIndex(0);
                 config.setTari(0);
                 reader.Config.Antennas.setAntennaRfConfig(1, config);
