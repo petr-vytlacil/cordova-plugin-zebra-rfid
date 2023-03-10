@@ -16,34 +16,34 @@ import java.util.Set;
 
 /**
  * @Auther: lizj
- * @Date: 12/25/20 16:44，
- * @Description: Zebra rfid �?�件
+ * @Date: 12/25/20 16:44
+ * @Description: Zebra rfid
  */
 public class ZebraRfidPlugin extends CordovaPlugin {
 
   private RFIDHandler rfidHandler;
   private CallbackContext mCallbackContext;
 
-  // 检测是�?�连接
+  // --
   private static final String CHECK_CONNECT = "check_connect";
-  // 连接
+  // --
   private static final String CONNECT = "connect";
-  // 断开连接
+  // --
   private static final String DISCONNECT = "disconnect";
 
   private static final String CHANGEMODE = "change_mode";
 
-  // 读�?�到的ID
+  // --
   private Set<String> tagIdSet = new HashSet<>();
-  // 是�?��?�客户端�?��?消�?�
+  // --
   private boolean isSend = false;
-  // 是�?�正在处�?�消�?�
+  // --
   private boolean isHandle = false;
 
   @Override
   public void initialize(CordovaInterface cordova, CordovaWebView webView) {
     super.initialize(cordova, webView);
-    //�?始化sdk
+    //--
     rfidHandler = new RFIDHandler();
     rfidHandler.init(cordova.getContext().getApplicationContext());
     rfidHandler.setOnChangeListener(callBack);
@@ -60,10 +60,10 @@ public class ZebraRfidPlugin extends CordovaPlugin {
           boolean isConnect = rfidHandler.isReaderConnected();
           if (isConnect) {
             obj.put("code", 1);
-            obj.put("msg", "已连接");
+            obj.put("msg", "Connected");
           } else {
             obj.put("code", 0);
-            obj.put("msg", "未连接");
+            obj.put("msg", "Disconnected");
           }
           PluginResult result = new PluginResult(PluginResult.Status.OK, obj);
           result.setKeepCallback(true);
@@ -79,10 +79,10 @@ public class ZebraRfidPlugin extends CordovaPlugin {
           String connect = rfidHandler.connect();
           if ("Connected".equals(connect)) {
             obj1.put("code", 1);
-            obj1.put("msg", "连接�?功");
+            obj1.put("msg", "Connected");
           } else {
             obj1.put("code", 0);
-            obj1.put("msg", "连接失败");
+            obj1.put("msg", "Diconnected");
           }
           PluginResult result = new PluginResult(PluginResult.Status.OK, obj1);
           result.setKeepCallback(true);
@@ -97,7 +97,7 @@ public class ZebraRfidPlugin extends CordovaPlugin {
         try {
           rfidHandler.disconnect();
           obj2.put("code", 1);
-          obj2.put("msg", "断开�?功");
+          obj2.put("msg", "Disconnected");
           PluginResult result = new PluginResult(PluginResult.Status.OK, obj2);
           result.setKeepCallback(true);
           mCallbackContext.sendPluginResult(result);
@@ -108,7 +108,7 @@ public class ZebraRfidPlugin extends CordovaPlugin {
         break;
       case CHANGEMODE:
         JSONObject obj3 = new JSONObject();
-        int mode = args.optString(0);
+        String mode = args.optString(0);
         try {
           rfidHandler.setTriggerMode(mode);
           obj3.put("code", 1);
@@ -128,8 +128,8 @@ public class ZebraRfidPlugin extends CordovaPlugin {
   RFIDCallBack callBack = new RFIDCallBack() {
     @Override
     public void handleTagData(TagData[] tagData) {
-      // 处�?�一下，如果一直返回�?�一个rfid，则�?�返回一次
-      // �?�有在新增id时，�?�?新返回
+      // --
+      // --
       if (isHandle) {
         return;
       }
@@ -144,7 +144,7 @@ public class ZebraRfidPlugin extends CordovaPlugin {
         }
       }
       if (isSend && !tagIdSet.isEmpty()) {
-        //读�?��?功的返回值
+        // --
         JSONObject obj = new JSONObject();
         try {
           obj.put("code", "1");

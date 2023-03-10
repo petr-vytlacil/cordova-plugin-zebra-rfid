@@ -43,15 +43,12 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
   String readername = "RFD8500123";
 
   private Context context;
-  // �?有一个接�?�对象
   RFIDCallBack rfidCallBackListener;
 
-  // �??供注册事件监�?�的方法
   public void setOnChangeListener(RFIDCallBack rfidCallBackListener) {
     this.rfidCallBackListener = rfidCallBackListener;
   }
 
-  // �?始化
   public void init(Context context) {
     this.context = context;
     InitSDK();
