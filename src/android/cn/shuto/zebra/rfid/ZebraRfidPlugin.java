@@ -75,9 +75,9 @@ public class ZebraRfidPlugin extends CordovaPlugin {
         break;
       case CONNECT:
         JSONObject obj1 = new JSONObject();
-        String mode = args.optString(0);
+        String connect_mode = args.optString(0);
         try {
-          String connect = rfidHandler.connect(mode);
+          String connect = rfidHandler.connect(connect_mode);
           if ("Connected".equals(connect)) {
             obj1.put("code", 1);
             obj1.put("msg", "Connected to ["+mode+"]");
@@ -182,7 +182,7 @@ public class ZebraRfidPlugin extends CordovaPlugin {
   }
 
   public void onResume(boolean multitasking) {
-    rfidHandler.connect();
+    rfidHandler.connect("BARCODE");
   }
 
 }
