@@ -102,7 +102,7 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
       Log.d(TAG, "ConnectionTask");
       GetAvailableReader();
       if (reader != null) {
-        return connect();
+        return connect("BARCODE");
       }
       return "Failed to find or connect reader";
     }

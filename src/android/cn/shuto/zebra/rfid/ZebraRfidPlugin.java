@@ -80,7 +80,7 @@ public class ZebraRfidPlugin extends CordovaPlugin {
           String connect = rfidHandler.connect(connect_mode);
           if ("Connected".equals(connect)) {
             obj1.put("code", 1);
-            obj1.put("msg", "Connected to ["+mode+"]");
+            obj1.put("msg", "Connected to ["+connect_mode+"]");
           } else {
             obj1.put("code", 0);
             obj1.put("msg", "Diconnected");
