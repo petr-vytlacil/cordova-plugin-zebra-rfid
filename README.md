@@ -35,7 +35,7 @@ Cordova Zebra Rfid Reader Plugin
 	**I don't know what the problem will be**
 	```
 	$scope.connect = function () {
-		zebraRfid.connect("", function (rs) {
+		zebraRfid.connect("", db_power, function (rs) {
 			alert(JSON.stringify(rs));
 		}, function (err) {
 			alert(err);

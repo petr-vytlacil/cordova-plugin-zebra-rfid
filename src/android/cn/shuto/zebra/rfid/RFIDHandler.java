@@ -44,7 +44,8 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
 
   private Context context;
   RFIDCallBack rfidCallBackListener;
-
+  
+  private int g_max_power = 270;
   public void setOnChangeListener(RFIDCallBack rfidCallBackListener) {
     this.rfidCallBackListener = rfidCallBackListener;
   }
@@ -102,7 +103,7 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
       Log.d(TAG, "ConnectionTask");
       GetAvailableReader();
       if (reader != null) {
-        return connect("BARCODE");
+        return connect("BARCODE", g_max_power);
       }
       return "Failed to find or connect reader";
     }
@@ -169,6 +170,7 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
         if (!reader.isConnected()) {
           // Establish connection to the RFID Reader
           reader.connect();
+          g_max_power = max_power;
           ConfigureReader(mode, max_power);
           return "Connected";
         }
@@ -254,6 +256,7 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
     try {
       // get the configuration                                                
         Antennas.AntennaRfConfig config = reader.Config.Antennas.getAntennaRfConfig(1);
+        g_max_power = dblevel;
         config.setTransmitPowerIndex(dblevel); 
         reader.Config.Antennas.setAntennaRfConfig(1,config);
     } catch (InvalidUsageException e) {
