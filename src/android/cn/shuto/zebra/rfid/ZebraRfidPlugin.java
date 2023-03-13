@@ -131,7 +131,7 @@ public class ZebraRfidPlugin extends CordovaPlugin {
           rfidHandler.setAntennaPower(dblevel);
           obj4.put("code", 1);
           obj4.put("msg", "Antenna Power Changed");
-          PluginResult result = new PluginResult(PluginResult.Status.OK, obj3);
+          PluginResult result = new PluginResult(PluginResult.Status.OK, obj4);
           result.setKeepCallback(true);
           mCallbackContext.sendPluginResult(result);
         } catch (Error e) {
