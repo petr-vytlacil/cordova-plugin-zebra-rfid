@@ -256,8 +256,10 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
         Antennas.AntennaRfConfig config = reader.Config.Antennas.getAntennaRfConfig(1);
         config.setTransmitPowerIndex(dblevel); 
         reader.Config.Antennas.setAntennaRfConfig(1,config);
-    } catch (OperationFailureException ex) {
-        Log.d(TAG, (" Antenna configuration failed " + ex.getVendorMessage()));
+    } catch (InvalidUsageException e) {
+        e.printStackTrace();
+    } catch (OperationFailureException e) {
+        e.printStackTrace();
     }
   }
 
