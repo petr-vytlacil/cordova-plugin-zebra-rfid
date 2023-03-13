@@ -41,6 +41,8 @@ public class ZebraRfidPlugin extends CordovaPlugin {
   private boolean isSend = false;
   // --
   private boolean isHandle = false;
+  
+  private int g_max_power = 270;
 
   @Override
   public void initialize(CordovaInterface cordova, CordovaWebView webView) {
@@ -79,6 +81,7 @@ public class ZebraRfidPlugin extends CordovaPlugin {
         JSONObject obj1 = new JSONObject();
         String connect_mode = args.optString(0);
         int db_level = args.optInt(1);
+        g_max_power = db_level;
         try {
           String connect = rfidHandler.connect(connect_mode, db_level);
           if ("Connected".equals(connect)) {
@@ -200,7 +203,7 @@ public class ZebraRfidPlugin extends CordovaPlugin {
   }
 
   public void onResume(boolean multitasking) {
-    rfidHandler.connect("BARCODE");
+    rfidHandler.connect("BARCODE",g_max_power);
   }
 
 }
