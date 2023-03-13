@@ -248,7 +248,18 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
     } catch (OperationFailureException e) {
         e.printStackTrace();
     }
-}
+  }
+  
+  public synchronized void setAntennaPower(int dblevel) {
+    try {
+      // get the configuration                                                
+        Antennas.AntennaRfConfig config = reader.Config.Antennas.getAntennaRfConfig(1);
+        config.setTransmitPowerIndex(dblevel); 
+        reader.Config.Antennas.setAntennaRfConfig(1,config);
+    } catch (OperationFailureException ex) {
+        Log.d(TAG, (" Antenna configuration failed " + ex.getVendorMessage()));
+    }
+  }
 
   public synchronized void disconnect() {
     Log.d(TAG, "disconnect " + reader);
