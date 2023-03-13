@@ -216,7 +216,7 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
         //int MAX_POWER = reader.ReaderCapabilities.getTransmitPowerLevelValues().length - 1;
         // set antenna configurations
         Antennas.AntennaRfConfig config = reader.Config.Antennas.getAntennaRfConfig(1);
-        config.setTransmitPowerIndex(150); 
+        config.setTransmitPowerIndex(270); 
         //config.setTransmitPowerIndex(MAX_POWER * (50/100));
         config.setrfModeTableIndex(0);
         config.setTari(0);

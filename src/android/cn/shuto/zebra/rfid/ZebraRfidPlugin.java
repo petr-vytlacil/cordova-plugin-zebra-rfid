@@ -32,6 +32,8 @@ public class ZebraRfidPlugin extends CordovaPlugin {
   private static final String DISCONNECT = "disconnect";
 
   private static final String CHANGEMODE = "change_mode";
+  
+  private static final String CHANGEPOWER = "change_power";
 
   // --
   private Set<String> tagIdSet = new HashSet<>();
@@ -121,7 +123,22 @@ public class ZebraRfidPlugin extends CordovaPlugin {
           obj3.put("msg", e.getMessage());
           mCallbackContext.error(obj3);
         }
-
+        break;
+      case CHANGEPOWER:
+        JSONObject obj4 = new JSONObject();
+        int dblevel = args.optInt(0);
+        try {
+          rfidHandler.setAntennaPower(dblevel);
+          obj4.put("code", 1);
+          obj4.put("msg", "Antenna Power Changed");
+          PluginResult result = new PluginResult(PluginResult.Status.OK, obj3);
+          result.setKeepCallback(true);
+          mCallbackContext.sendPluginResult(result);
+        } catch (Error e) {
+          obj4.put("msg", e.getMessage());
+          mCallbackContext.error(obj4);
+        }  
+        break;
     }
     return true;
   }
