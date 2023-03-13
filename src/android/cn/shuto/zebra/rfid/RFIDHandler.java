@@ -162,14 +162,14 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
     }
   }
 
-  public synchronized String connect(String mode) {
+  public synchronized String connect(String mode, int max_power) {
     if (reader != null) {
       Log.d(TAG, "connect " + reader.getHostName());
       try {
         if (!reader.isConnected()) {
           // Establish connection to the RFID Reader
           reader.connect();
-          ConfigureReader(mode);
+          ConfigureReader(mode, max_power);
           return "Connected";
         }
       } catch (InvalidUsageException e) {
@@ -184,7 +184,7 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
     return "";
   }
 
-  private void ConfigureReader(String mode) {
+  private void ConfigureReader(String mode, int max_power) {
     Log.d(TAG, "ConfigureReader " + reader.getHostName());
     if (reader.isConnected()) {
       TriggerInfo triggerInfo = new TriggerInfo();
@@ -216,7 +216,7 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
         //int MAX_POWER = reader.ReaderCapabilities.getTransmitPowerLevelValues().length - 1;
         // set antenna configurations
         Antennas.AntennaRfConfig config = reader.Config.Antennas.getAntennaRfConfig(1);
-        config.setTransmitPowerIndex(270); 
+        config.setTransmitPowerIndex(max_power); 
         //config.setTransmitPowerIndex(MAX_POWER * (50/100));
         config.setrfModeTableIndex(0);
         config.setTari(0);

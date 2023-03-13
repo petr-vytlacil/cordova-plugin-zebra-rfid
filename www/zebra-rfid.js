@@ -8,8 +8,8 @@ exports.checkConnect = function (arg0, success, error) {
     exec(success, error, 'zebraRfid', 'check_connect', [arg0]);
 };
 
-exports.connect = function (arg0, success, error) {
-    exec(success, error, 'zebraRfid', 'connect', [arg0]);
+exports.connect = function (arg0, arg1, success, error) {
+    exec(success, error, 'zebraRfid', 'connect', [arg0, arg1]);
 };
 
 exports.disconnect = function (arg0, success, error) {

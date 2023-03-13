@@ -78,8 +78,9 @@ public class ZebraRfidPlugin extends CordovaPlugin {
       case CONNECT:
         JSONObject obj1 = new JSONObject();
         String connect_mode = args.optString(0);
+        int db_level = args.optInt(1);
         try {
-          String connect = rfidHandler.connect(connect_mode);
+          String connect = rfidHandler.connect(connect_mode, db_level);
           if ("Connected".equals(connect)) {
             obj1.put("code", 1);
             obj1.put("msg", "Connected to ["+connect_mode+"]");
