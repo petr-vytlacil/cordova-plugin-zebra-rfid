@@ -40,7 +40,7 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
   private static RFIDReader reader;
   private EventHandler eventHandler;
   // In case of RFD8500 change reader name with intended device below from list of paired RFD8500
-  String readername = "RFD8500123";
+  String readername = "MC3300";//"RFD8500123";
 
   private Context context;
   RFIDCallBack rfidCallBackListener;
@@ -216,7 +216,7 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
         int MAX_POWER = reader.ReaderCapabilities.getTransmitPowerLevelValues().length - 1;
         // set antenna configurations
         Antennas.AntennaRfConfig config = reader.Config.Antennas.getAntennaRfConfig(1);
-        config.setTransmitPowerIndex(MAX_POWER);
+        config.setTransmitPowerIndex(MAX_POWER * (50/100));
         config.setrfModeTableIndex(0);
         config.setTari(0);
         reader.Config.Antennas.setAntennaRfConfig(1, config);
