@@ -113,7 +113,7 @@ public class ZebraRfidPlugin extends CordovaPlugin {
           mCallbackContext.error(obj2);
         }
         break;
-      case CHANGEMODE:
+      /*case CHANGEMODE:
         JSONObject obj3 = new JSONObject();
         String mode = args.optString(0);
         try {
@@ -127,7 +127,7 @@ public class ZebraRfidPlugin extends CordovaPlugin {
           obj3.put("msg", e.getMessage());
           mCallbackContext.error(obj3);
         }
-        break;
+        break;*/
       case CHANGEPOWER:
         JSONObject obj4 = new JSONObject();
         int dblevel = args.optInt(0);

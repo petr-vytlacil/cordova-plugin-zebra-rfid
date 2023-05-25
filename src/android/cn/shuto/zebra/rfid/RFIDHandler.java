@@ -47,6 +47,7 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
   RFIDCallBack rfidCallBackListener;
   
   private int MAX_POWER = 270;
+  
   public void setOnChangeListener(RFIDCallBack rfidCallBackListener) {
     this.rfidCallBackListener = rfidCallBackListener;
   }
@@ -75,12 +76,11 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
       Log.d(TAG, "CreateInstanceTask");
       // Based on support available on host device choose the reader type
       InvalidUsageException invalidUsageException = null;
+      readers = new Readers(context, ENUM_TRANSPORT.ALL);
       try {
-        readers = new Readers(context, ENUM_TRANSPORT.SERVICE_SERIAL);
         availableRFIDReaderList = readers.GetAvailableRFIDReaderList();
       } catch (InvalidUsageException e) {
         e.printStackTrace();
-        invalidUsageException = e;
       }
       if (invalidUsageException != null) {
         readers.Dispose();
@@ -95,6 +95,12 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
     @Override
     protected void onPostExecute(Void aVoid) {
       super.onPostExecute(aVoid);
+      connectReader();
+    }
+  }
+  
+  private synchronized void connectReader() {
+    if (!isReaderConnected()) {
       new ConnectionTask().execute();
     }
   }
@@ -123,21 +129,20 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
 
   private synchronized void GetAvailableReader() {
     Log.d(TAG, "GetAvailableReader");
-    try {
-      if (readers != null) {
-        readers.attach(this);
+    if (readers != null) {
+      readers.attach(this);
+      try {
         if (readers.GetAvailableRFIDReaderList() != null) {
           availableRFIDReaderList = readers.GetAvailableRFIDReaderList();
           if (availableRFIDReaderList.size() != 0) {
             // if single reader is available then connect it
-            //ReaderDevice readerDevice;
             if (availableRFIDReaderList.size() == 1) {
               readerDevice = availableRFIDReaderList.get(0);
               reader = readerDevice.getRFIDReader();
             } else {
               // search reader specified by name
               for (ReaderDevice device : availableRFIDReaderList) {
-                if (device.getName().equals(readername)) {
+                if (device.getName().equals(readerName)) {
                   readerDevice = device;
                   reader = readerDevice.getRFIDReader();
                 }
@@ -145,9 +150,9 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
             }
           }
         }
+      } catch (InvalidUsageException ie) {
+        ie.printStackTrace();
       }
-    } catch (InvalidUsageException e) {
-      e.printStackTrace();
     }
   }
 
@@ -155,7 +160,7 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
   @Override
   public void RFIDReaderAppeared(ReaderDevice readerDevice) {
     Log.d(TAG, "RFIDReaderAppeared " + readerDevice.getName());
-    new ConnectionTask().execute();
+    connectReader();
   }
 
   @Override
@@ -208,18 +213,15 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
         reader.Events.setTagReadEvent(true);
         reader.Events.setAttachTagDataWithReadEvent(false);
         // set trigger mode as rfid so scanner beam will not come
-        reader.Config.setTriggerMode(ENUM_TRIGGER_MODE.RFID_MODE, true);        
-        
+        reader.Config.setTriggerMode(ENUM_TRIGGER_MODE.RFID_MODE, true);
         // set start and stop triggers
         reader.Config.setStartTrigger(triggerInfo.StartTrigger);
         reader.Config.setStopTrigger(triggerInfo.StopTrigger);
         // power levels are index based so maximum power supported get the last one
-        // general
         MAX_POWER = reader.ReaderCapabilities.getTransmitPowerLevelValues().length - 1;
         // set antenna configurations
         Antennas.AntennaRfConfig config = reader.Config.Antennas.getAntennaRfConfig(1);
-        config.setTransmitPowerIndex(MAX_POWER); 
-        //config.setTransmitPowerIndex(MAX_POWER * (50/100));
+        config.setTransmitPowerIndex(MAX_POWER);
         config.setrfModeTableIndex(0);
         config.setTari(0);
         reader.Config.Antennas.setAntennaRfConfig(1, config);
@@ -235,6 +237,62 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
       } catch (InvalidUsageException | OperationFailureException e) {
         e.printStackTrace();
       }
+    }
+  }
+  
+  public synchronized void disconnect() {
+    Log.d(TAG, "disconnect " + reader);
+    try {
+      if (reader != null) {
+        reader.Events.removeEventsListener(eventHandler);
+        reader.disconnect();
+      }
+    } catch (InvalidUsageException e) {
+      e.printStackTrace();
+    } catch (OperationFailureException e) {
+      e.printStackTrace();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+  
+  public synchronized void dispose() {
+    try {
+      if (readers != null) {
+        reader = null;
+        readers.Dispose();
+        readers = null;
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+  
+  synchronized void performInventory() {
+    // check reader connection
+    if (!isReaderConnected()) {
+      return;
+    }
+    try {
+      reader.Actions.Inventory.perform();
+    } catch (InvalidUsageException e) {
+      e.printStackTrace();
+    } catch (OperationFailureException e) {
+      e.printStackTrace();
+    }
+  }
+  
+  synchronized void stopInventory() {
+    // check reader connection
+    if (!isReaderConnected()) {
+      return;
+    }
+    try {
+      reader.Actions.Inventory.stop();
+    } catch (InvalidUsageException e) {
+      e.printStackTrace();
+    } catch (OperationFailureException e) {
+      e.printStackTrace();
     }
   }
   
@@ -267,63 +325,6 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
         e.printStackTrace();
     }
   }
-
-  public synchronized void disconnect() {
-    Log.d(TAG, "disconnect " + reader);
-    try {
-      if (reader != null) {
-        reader.Events.removeEventsListener(eventHandler);
-        reader.disconnect();
-      }
-    } catch (InvalidUsageException e) {
-      e.printStackTrace();
-    } catch (OperationFailureException e) {
-      e.printStackTrace();
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-
-  public synchronized void dispose() {
-    try {
-      if (readers != null) {
-        reader = null;
-        readers.Dispose();
-        readers = null;
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-
-  synchronized void performInventory() {
-    // check reader connection
-    if (!isReaderConnected()) {
-      return;
-    }
-    try {
-      reader.Actions.Inventory.perform();
-    } catch (InvalidUsageException e) {
-      e.printStackTrace();
-    } catch (OperationFailureException e) {
-      e.printStackTrace();
-    }
-  }
-
-  synchronized void stopInventory() {
-    // check reader connection
-    if (!isReaderConnected()) {
-      return;
-    }
-    try {
-      reader.Actions.Inventory.stop();
-    } catch (InvalidUsageException e) {
-      e.printStackTrace();
-    } catch (OperationFailureException e) {
-      e.printStackTrace();
-    }
-  }
-
   // Read/Status Notify handler
   // Implement the RfidEventsLister class to receive event notifications
   public class EventHandler implements RfidEventsListener {

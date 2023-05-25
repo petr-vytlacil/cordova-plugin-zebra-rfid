@@ -16,9 +16,9 @@ exports.disconnect = function (arg0, success, error) {
     exec(success, error, 'zebraRfid', 'disconnect', [arg0]);
 };
 
-exports.change_mode = function (arg0, success, error) {
+/*exports.change_mode = function (arg0, success, error) {
     exec(success, error, 'zebraRfid', 'change_mode', [arg0]);
-};
+};*/
 
 exports.change_power = function (arg0, success, error) {
     exec(success, error, 'zebraRfid', 'change_power', [arg0]);
