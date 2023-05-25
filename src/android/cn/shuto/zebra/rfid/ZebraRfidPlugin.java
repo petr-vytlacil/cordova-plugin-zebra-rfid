@@ -83,7 +83,7 @@ public class ZebraRfidPlugin extends CordovaPlugin {
         int db_level = args.optInt(1);
         g_max_power = db_level;
         try {
-          String connect = rfidHandler.connect(connect_mode, db_level);
+          String connect = rfidHandler.connect();
           if ("Connected".equals(connect)) {
             obj1.put("code", 1);
             obj1.put("msg", "Connected to ["+connect_mode+"]");
@@ -203,7 +203,7 @@ public class ZebraRfidPlugin extends CordovaPlugin {
   }
 
   public void onResume(boolean multitasking) {
-    rfidHandler.connect("BARCODE",g_max_power);
+    rfidHandler.connect();
   }
 
 }

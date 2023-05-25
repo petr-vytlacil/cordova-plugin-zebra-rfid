@@ -20,5 +20,14 @@
         <lib-file src="src/android/API3_LIB-release-1.0.2.116.aar" />
         <framework src="com.android.support:support-v4:$ANDROID_SUPPORT_V4_VERSION" />
         <preference name="ANDROID_SUPPORT_V4_VERSION" default="27.+" />
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+          <uses-permission android:name="android.permission.BLUETOOTH"/>
+          <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+          <uses-permission android:name="android.permission.BLUETOOTH_SCAN"/>
+          <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
+          <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE"/>
+          <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+          <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+        </config-file>
     </platform>
 </plugin>

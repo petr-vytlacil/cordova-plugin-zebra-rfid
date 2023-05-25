@@ -37,15 +37,16 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
   // RFID Reader
   private static Readers readers;
   private static ArrayList<ReaderDevice> availableRFIDReaderList;
+  private static ReaderDevice readerDevice;
   private static RFIDReader reader;
   private EventHandler eventHandler;
   // In case of RFD8500 change reader name with intended device below from list of paired RFD8500
-  String readername = "MC3300";//"RFD8500123";
+  String readername = "RFD40P_23045520101388";//"RFD8500123";
 
   private Context context;
   RFIDCallBack rfidCallBackListener;
   
-  private int g_max_power = 270;
+  private int MAX_POWER = 270;
   public void setOnChangeListener(RFIDCallBack rfidCallBackListener) {
     this.rfidCallBackListener = rfidCallBackListener;
   }
@@ -60,7 +61,9 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
     if (readers == null) {
       new CreateInstanceTask().execute();
     } else {
-      new ConnectionTask().execute();
+      if(!isReaderConnected()){
+        new ConnectionTask().execute();
+      }
     }
   }
 
@@ -103,7 +106,7 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
       Log.d(TAG, "ConnectionTask");
       GetAvailableReader();
       if (reader != null) {
-        return connect("BARCODE", g_max_power);
+        return connect();
       }
       return "Failed to find or connect reader";
     }
@@ -127,7 +130,7 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
           availableRFIDReaderList = readers.GetAvailableRFIDReaderList();
           if (availableRFIDReaderList.size() != 0) {
             // if single reader is available then connect it
-            ReaderDevice readerDevice;
+            //ReaderDevice readerDevice;
             if (availableRFIDReaderList.size() == 1) {
               readerDevice = availableRFIDReaderList.get(0);
               reader = readerDevice.getRFIDReader();
@@ -163,16 +166,17 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
     }
   }
 
-  public synchronized String connect(String mode, int max_power) {
+  public synchronized String connect() {
     if (reader != null) {
       Log.d(TAG, "connect " + reader.getHostName());
       try {
         if (!reader.isConnected()) {
           // Establish connection to the RFID Reader
           reader.connect();
-          g_max_power = max_power;
-          ConfigureReader(mode, max_power);
-          return "Connected";
+          ConfigureReader();
+          if (reader.isConnected()) {
+            return "Connected: " + reader.getHostName();
+          }
         }
       } catch (InvalidUsageException e) {
         e.printStackTrace();
@@ -186,7 +190,7 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
     return "";
   }
 
-  private void ConfigureReader(String mode, int max_power) {
+  private void ConfigureReader() {
     Log.d(TAG, "ConfigureReader " + reader.getHostName());
     if (reader.isConnected()) {
       TriggerInfo triggerInfo = new TriggerInfo();
@@ -204,21 +208,17 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
         reader.Events.setTagReadEvent(true);
         reader.Events.setAttachTagDataWithReadEvent(false);
         // set trigger mode as rfid so scanner beam will not come
-        if(mode.equals("RFID")) {
-          reader.Config.setTriggerMode(ENUM_TRIGGER_MODE.RFID_MODE, true);
-        } else if(mode.equals("BARCODE")) {
-          reader.Config.setTriggerMode(ENUM_TRIGGER_MODE.BARCODE_MODE, true);
-        }
+        reader.Config.setTriggerMode(ENUM_TRIGGER_MODE.RFID_MODE, true);        
         
         // set start and stop triggers
         reader.Config.setStartTrigger(triggerInfo.StartTrigger);
         reader.Config.setStopTrigger(triggerInfo.StopTrigger);
         // power levels are index based so maximum power supported get the last one
         // general
-        //int MAX_POWER = reader.ReaderCapabilities.getTransmitPowerLevelValues().length - 1;
+        MAX_POWER = reader.ReaderCapabilities.getTransmitPowerLevelValues().length - 1;
         // set antenna configurations
         Antennas.AntennaRfConfig config = reader.Config.Antennas.getAntennaRfConfig(1);
-        config.setTransmitPowerIndex(max_power); 
+        config.setTransmitPowerIndex(MAX_POWER); 
         //config.setTransmitPowerIndex(MAX_POWER * (50/100));
         config.setrfModeTableIndex(0);
         config.setTari(0);
@@ -256,8 +256,10 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
     try {
       // get the configuration                                                
         Antennas.AntennaRfConfig config = reader.Config.Antennas.getAntennaRfConfig(1);
-        g_max_power = dblevel;
-        config.setTransmitPowerIndex(dblevel); 
+        MAX_POWER = dblevel;
+        config.setTransmitPowerIndex(MAX_POWER);
+        config.setrfModeTableIndex(0);
+        config.setTari(0);
         reader.Config.Antennas.setAntennaRfConfig(1,config);
     } catch (InvalidUsageException e) {
         e.printStackTrace();
