@@ -203,7 +203,8 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
         reader.Events.setTagReadEvent(true);
         reader.Events.setAttachTagDataWithReadEvent(false);
         // set trigger mode as rfid so scanner beam will not come
-        reader.Config.setTriggerMode(ENUM_TRIGGER_MODE.RFID_MODE, true);
+        //reader.Config.setTriggerMode(ENUM_TRIGGER_MODE.RFID_MODE, true);
+        reader.Config.setTriggerMode(ENUM_TRIGGER_MODE.BARCODE_MODE, true);
         // set start and stop triggers
         reader.Config.setStartTrigger(triggerInfo.StartTrigger);
         reader.Config.setStopTrigger(triggerInfo.StopTrigger);
