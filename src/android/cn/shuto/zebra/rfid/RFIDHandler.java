@@ -46,12 +46,12 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
   private Context context;
   RFIDCallBack rfidCallBackListener;
   
-  private int MAX_POWER = 270;
+  private int MAX_POWER = 300;
   
   public void setOnChangeListener(RFIDCallBack rfidCallBackListener) {
     this.rfidCallBackListener = rfidCallBackListener;
   }
-
+  
   public void init(Context context) {
     this.context = context;
     InitSDK();
