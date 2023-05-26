@@ -136,18 +136,8 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
           availableRFIDReaderList = readers.GetAvailableRFIDReaderList();
           if (availableRFIDReaderList.size() != 0) {
             // if single reader is available then connect it
-            if (availableRFIDReaderList.size() == 1) {
-              readerDevice = availableRFIDReaderList.get(0);
-              reader = readerDevice.getRFIDReader();
-            } else {
-              // search reader specified by name
-              for (ReaderDevice device : availableRFIDReaderList) {
-                if (device.getName().equals(readerName)) {
-                  readerDevice = device;
-                  reader = readerDevice.getRFIDReader();
-                }
-              }
-            }
+            readerDevice = availableRFIDReaderList.get(0);
+            reader = readerDevice.getRFIDReader();
           }
         }
       } catch (InvalidUsageException ie) {
