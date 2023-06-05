@@ -301,12 +301,12 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
     }
   }
   
-  public synchronized void setAntennaPower(int dblevel) {
+  public synchronized void setAntennaPower(int new_power) {
     try {
       // get the configuration                                                
         Antennas.AntennaRfConfig config = reader.Config.Antennas.getAntennaRfConfig(1);
-        MAX_POWER = dblevel;
-        config.setTransmitPowerIndex(MAX_POWER);
+        this.MAX_POWER = new_power;
+        config.setTransmitPowerIndex(this.MAX_POWER);
         config.setrfModeTableIndex(0);
         config.setTari(0);
         reader.Config.Antennas.setAntennaRfConfig(1,config);
@@ -317,8 +317,8 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
     }
   }
   
-  public synchronized void setMaxPower(int db_power) {
-    MAX_POWER = db_power;
+  public synchronized void setMaxPower(int new_power) {
+    this.MAX_POWER = new_power;
   }
   // Read/Status Notify handler
   // Implement the RfidEventsLister class to receive event notifications
