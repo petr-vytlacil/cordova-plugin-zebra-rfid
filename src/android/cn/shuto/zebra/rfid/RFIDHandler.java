@@ -316,6 +316,10 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
         e.printStackTrace();
     }
   }
+  
+  public synchronized void setMaxPower(int db_power) {
+    MAX_POWER = db_power;
+  }
   // Read/Status Notify handler
   // Implement the RfidEventsLister class to receive event notifications
   public class EventHandler implements RfidEventsListener {

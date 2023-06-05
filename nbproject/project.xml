@@ -3,7 +3,7 @@
     <type>org.netbeans.modules.web.clientproject</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/clientside-project/1">
-            <name>zebra-rfid</name>
+            <name>EGALITE cordova-plugin-zebra-rfid</name>
         </data>
     </configuration>
 </project>

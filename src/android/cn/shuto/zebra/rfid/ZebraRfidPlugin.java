@@ -83,6 +83,7 @@ public class ZebraRfidPlugin extends CordovaPlugin {
         int db_level = args.optInt(1);
         g_max_power = db_level;
         try {
+          rfidHandler.setMaxPower(db_level);
           String connect = rfidHandler.connect();
           if ("Connected".equals(connect)) {
             obj1.put("code", 1);
