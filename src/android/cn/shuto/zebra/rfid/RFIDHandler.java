@@ -45,13 +45,13 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
 
   private Context context;
   RFIDCallBack rfidCallBackListener;
-  
+
   private int MAX_POWER = 300;
-  
+
   public void setOnChangeListener(RFIDCallBack rfidCallBackListener) {
     this.rfidCallBackListener = rfidCallBackListener;
   }
-  
+
   public void init(Context context) {
     this.context = context;
     InitSDK();
@@ -62,7 +62,7 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
     if (readers == null) {
       new CreateInstanceTask().execute();
     } else {
-      if(!isReaderConnected()){
+      if (!isReaderConnected()) {
         new ConnectionTask().execute();
       }
     }
@@ -98,7 +98,7 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
       connectReader();
     }
   }
-  
+
   private synchronized void connectReader() {
     if (!isReaderConnected()) {
       new ConnectionTask().execute();
@@ -189,7 +189,7 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
     Log.d(TAG, "ConfigureReader " + reader.getHostName());
     if (reader.isConnected()) {
       TriggerInfo triggerInfo = new TriggerInfo();
-      triggerInfo.StartTrigger.setTriggerType(START_TRIGGER_TYPE.START_TRIGGER_TYPE_IMMEDIATE);
+      triggerInfo.StartTrigger.setTriggerType(START_TRIGGER_TYPE.START_TRIGGER_TYPE_HANDHELD);
       triggerInfo.StopTrigger.setTriggerType(STOP_TRIGGER_TYPE.STOP_TRIGGER_TYPE_IMMEDIATE);
       try {
         // receive events from reader
@@ -230,7 +230,7 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
       }
     }
   }
-  
+
   public synchronized void disconnect() {
     Log.d(TAG, "disconnect " + reader);
     try {
@@ -246,7 +246,7 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
       e.printStackTrace();
     }
   }
-  
+
   public synchronized void dispose() {
     try {
       if (readers != null) {
@@ -258,7 +258,7 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
       e.printStackTrace();
     }
   }
-  
+
   synchronized void performInventory() {
     // check reader connection
     if (!isReaderConnected()) {
@@ -272,7 +272,7 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
       e.printStackTrace();
     }
   }
-  
+
   synchronized void stopInventory() {
     // check reader connection
     if (!isReaderConnected()) {
@@ -286,40 +286,41 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
       e.printStackTrace();
     }
   }
-  
+
   public synchronized void setTriggerMode(String mode) {
     try {
-      if(mode.equals("RFID")){
+      if (mode.equals("RFID")) {
         reader.Config.setTriggerMode(ENUM_TRIGGER_MODE.RFID_MODE, true);
-      } else if(mode.equals("BARCODE")) {
+      } else if (mode.equals("BARCODE")) {
         reader.Config.setTriggerMode(ENUM_TRIGGER_MODE.BARCODE_MODE, true);
-      }        
+      }
     } catch (InvalidUsageException e) {
-        e.printStackTrace();
+      e.printStackTrace();
     } catch (OperationFailureException e) {
-        e.printStackTrace();
+      e.printStackTrace();
     }
   }
-  
+
   public synchronized void setAntennaPower(int new_power) {
     try {
-      // get the configuration                                                
-        Antennas.AntennaRfConfig config = reader.Config.Antennas.getAntennaRfConfig(1);
-        this.MAX_POWER = new_power;
-        config.setTransmitPowerIndex(this.MAX_POWER);
-        config.setrfModeTableIndex(0);
-        config.setTari(0);
-        reader.Config.Antennas.setAntennaRfConfig(1,config);
+      // get the configuration
+      Antennas.AntennaRfConfig config = reader.Config.Antennas.getAntennaRfConfig(1);
+      this.MAX_POWER = new_power;
+      config.setTransmitPowerIndex(this.MAX_POWER);
+      config.setrfModeTableIndex(0);
+      config.setTari(0);
+      reader.Config.Antennas.setAntennaRfConfig(1, config);
     } catch (InvalidUsageException e) {
-        e.printStackTrace();
+      e.printStackTrace();
     } catch (OperationFailureException e) {
-        e.printStackTrace();
+      e.printStackTrace();
     }
   }
-  
+
   public synchronized void setMaxPower(int new_power) {
     this.MAX_POWER = new_power;
   }
+
   // Read/Status Notify handler
   // Implement the RfidEventsLister class to receive event notifications
   public class EventHandler implements RfidEventsListener {
