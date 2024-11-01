@@ -161,14 +161,14 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
     }
   }
 
-  public synchronized String connect() {
+  public synchronized String connect(String mode) {
     if (reader != null) {
       Log.d(TAG, "connect " + reader.getHostName());
       try {
         if (!reader.isConnected()) {
           // Establish connection to the RFID Reader
           reader.connect();
-          ConfigureReader();
+          ConfigureReader(mode);
           if (reader.isConnected()) {
             return "Connected: " + reader.getHostName();
           }
@@ -185,7 +185,7 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
     return "";
   }
 
-  private void ConfigureReader() {
+  private void ConfigureReader(String mode) {
     Log.d(TAG, "ConfigureReader " + reader.getHostName());
     if (reader.isConnected()) {
       TriggerInfo triggerInfo = new TriggerInfo();
@@ -204,7 +204,12 @@ class RFIDHandler implements Readers.RFIDReaderEventHandler {
         reader.Events.setAttachTagDataWithReadEvent(false);
         // set trigger mode as rfid so scanner beam will not come
         //reader.Config.setTriggerMode(ENUM_TRIGGER_MODE.RFID_MODE, true);
-        reader.Config.setTriggerMode(ENUM_TRIGGER_MODE.BARCODE_MODE, true);
+        if (mode == "BARCODE") {
+          reader.Config.setTriggerMode(ENUM_TRIGGER_MODE.BARCODE_MODE, true);
+        } else {
+          reader.Config.setTriggerMode(ENUM_TRIGGER_MODE.RFID_MODE, true);
+        }
+
         // set start and stop triggers
         reader.Config.setStartTrigger(triggerInfo.StartTrigger);
         reader.Config.setStopTrigger(triggerInfo.StopTrigger);

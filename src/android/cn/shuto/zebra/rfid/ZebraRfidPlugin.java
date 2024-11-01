@@ -32,7 +32,7 @@ public class ZebraRfidPlugin extends CordovaPlugin {
   private static final String DISCONNECT = "disconnect";
 
   private static final String CHANGEMODE = "change_mode";
-  
+
   private static final String CHANGEPOWER = "change_power";
 
   // --
@@ -41,7 +41,7 @@ public class ZebraRfidPlugin extends CordovaPlugin {
   private boolean isSend = false;
   // --
   private boolean isHandle = false;
-  
+
   private int g_max_power = 270;
 
   @Override
@@ -84,10 +84,10 @@ public class ZebraRfidPlugin extends CordovaPlugin {
         g_max_power = db_level;
         try {
           rfidHandler.setMaxPower(db_level);
-          String connect = rfidHandler.connect();
+          String connect = rfidHandler.connect(connect_mode);
           if ("Connected".equals(connect)) {
             obj1.put("code", 1);
-            obj1.put("msg", "Connected to ["+connect_mode+"]");
+            obj1.put("msg", "Connected to [" + connect_mode + "]");
           } else {
             obj1.put("code", 0);
             obj1.put("msg", "Diconnected");
@@ -142,7 +142,7 @@ public class ZebraRfidPlugin extends CordovaPlugin {
         } catch (Error e) {
           obj4.put("msg", e.getMessage());
           mCallbackContext.error(obj4);
-        }  
+        }
         break;
     }
     return true;
