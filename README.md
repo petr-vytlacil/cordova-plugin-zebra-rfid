@@ -55,3 +55,24 @@ Cordova Zebra Rfid Reader Plugin
 		})
 	}
 	```
+- Change Power
+
+	**Experimental**
+	```
+	zebraRfid.change_power(db_power, function (rs) {
+		var result = $.parseJSON(JSON.stringify(rs));
+		if (result.msg) {
+			console.log(result.msg);
+		}
+	});
+	```
+- Write Tag
+
+	**Experimental**
+	```
+	zebraRfid.write_tag(sourceEPC, password, targetEPC, function (rs) {
+		var result = $.parseJSON(JSON.stringify(rs));
+		if (result.msg) {
+			console.log(result.msg);
+		}
+	});
