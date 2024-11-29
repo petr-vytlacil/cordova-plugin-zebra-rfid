@@ -35,6 +35,8 @@ public class ZebraRfidPlugin extends CordovaPlugin {
 
   private static final String CHANGEPOWER = "change_power";
 
+  private static final String WRITE_TAG = "write_tag";
+
   // --
   private Set<String> tagIdSet = new HashSet<>();
   // --
@@ -131,7 +133,7 @@ public class ZebraRfidPlugin extends CordovaPlugin {
           obj3.put("msg", e.getMessage());
           mCallbackContext.error(obj3);
         }
-        break;*/
+        break;*/      
       case CHANGEPOWER:
         JSONObject obj4 = new JSONObject();
         int dblevel = args.optInt(0);
@@ -145,6 +147,23 @@ public class ZebraRfidPlugin extends CordovaPlugin {
         } catch (Error e) {
           obj4.put("msg", e.getMessage());
           mCallbackContext.error(obj4);
+        }
+        break;
+      case WRITE_TAG:
+        JSONObject obj5 = new JSONObject();
+        String sourceEPC = args.optString(0);
+        String rfid_password = args.optString(1);
+        String targetEPC = args.optString(2);
+        try {
+          rfidHandler.writeTag(sourceEPC, rfid_password, targetEPC, 0);
+          obj5.put("code", 1);
+          obj5.put("msg", "Tag Sucessfully Writed");
+          PluginResult result = new PluginResult(PluginResult.Status.OK, obj5);
+          result.setKeepCallback(true);
+          mCallbackContext.sendPluginResult(result);
+        } catch (Error e) {
+          obj5.put("msg", e.getMessage());
+          mCallbackContext.error(obj5);
         }
         break;
     }
