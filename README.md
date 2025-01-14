@@ -2,7 +2,7 @@
 Cordova Zebra Rfid Reader Plugin
 
 #### Plugin Installation
-`cordova plugin add https://github.com/Egalite-Dev-Ops/cordova-plugin-zebra-rfid.git`
+`cordova plugin add [https://github.com/Egalite-Dev-Ops/cordova-plugin-zebra-rfid.git](https://github.com/petr-vytlacil/cordova-plugin-zebra-rfid.git)`
 
 #### plug-in use
 - RFID Initialization
