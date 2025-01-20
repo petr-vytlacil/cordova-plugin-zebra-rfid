@@ -193,7 +193,9 @@ public class ZebraRfidPlugin extends CordovaPlugin {
         JSONObject obj = new JSONObject();
         try {
           obj.put("code", "1");
-          obj.put("data", tagIdSet);
+
+          JSONArray tagIdArray = new JSONArray(tagIdSet);
+          obj.put("data", tagIdArray);
           PluginResult result = new PluginResult(PluginResult.Status.OK, obj);
           result.setKeepCallback(true);
           mCallbackContext.sendPluginResult(result);
